@@ -1,8 +1,130 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- HERO -->
+<section class="hero position-relative overflow-hidden">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="container position-relative">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="badge rounded-pill hero-pill mb-3 reveal">
+                    <i class="bi bi-stars me-1"></i> No more long registrar lines
+                </span>
+                <h1 class="display-4 fw-extrabold mb-3 reveal" style="--d:.08s">
+                    Request school documents <span class="text-gradient">online</span>, in minutes.
+                </h1>
+                <p class="lead text-secondary mb-4 reveal" style="--d:.16s">
+                    Submit your request, get a reference number, and follow its progress from
+                    pending to ready for pickup, all from your phone or laptop.
+                </p>
+                <div class="d-flex flex-wrap gap-3 reveal" style="--d:.24s">
+                    <a class="btn btn-primary btn-lg btn-pill px-4" asp-controller="Requests" asp-action="Create">
+                        Request a document <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                    <a class="btn btn-outline-secondary btn-lg btn-pill px-4" asp-controller="Requests" asp-action="Track">
+                        <i class="bi bi-search me-1"></i> Track a request
+                    </a>
+                </div>
+
+                <div class="row g-4 mt-4 pt-2 reveal" style="--d:.32s">
+                    <div class="col-4">
+                        <div class="stat"><span class="count" data-to="@ViewBag.TotalRequests">0</span></div>
+                        <div class="small text-secondary">Requests submitted</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat"><span class="count" data-to="@ViewBag.Released">0</span></div>
+                        <div class="small text-secondary">Documents released</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat"><span class="count" data-to="6">0</span></div>
+                        <div class="small text-secondary">Document types</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating preview card -->
+            <div class="col-lg-6">
+                <div class="preview-wrap reveal" style="--d:.2s">
+                    <div class="preview-card float">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="fw-semibold">Transcript of Records</span>
+                            <span class="badge rounded-pill bg-primary-subtle text-primary-emphasis">Ready for Pickup</span>
+                        </div>
+                        <div class="small text-secondary mb-3">Ref: DR-261123-4821</div>
+                        <div class="mini-steps">
+                            <span class="done"></span><span class="done"></span><span class="done"></span><span></span>
+                        </div>
+                        <div class="d-flex justify-content-between small text-secondary mt-2">
+                            <span>Pending</span><span>Processing</span><span>Ready</span><span>Released</span>
+                        </div>
+                    </div>
+                    <div class="preview-chip chip-a float-slow"><i class="bi bi-check-circle-fill text-success me-2"></i>Request received</div>
+                    <div class="preview-chip chip-b float-slow" style="animation-delay:-2s"><i class="bi bi-bell-fill text-warning me-2"></i>Status updated</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="container py-5">
+    <div class="text-center mb-5 reveal">
+        <h2 class="fw-bold">How it works</h2>
+        <p class="text-secondary">Three simple steps, no paperwork pile.</p>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4 reveal" style="--d:.0s">
+            <div class="feature-card h-100">
+                <div class="icon-box"><i class="bi bi-pencil-square"></i></div>
+                <h5 class="fw-semibold">1. Fill out the form</h5>
+                <p class="text-secondary mb-0">Choose the document, number of copies, and your purpose for requesting it.</p>
+            </div>
+        </div>
+        <div class="col-md-4 reveal" style="--d:.1s">
+            <div class="feature-card h-100">
+                <div class="icon-box"><i class="bi bi-hash"></i></div>
+                <h5 class="fw-semibold">2. Get a reference no.</h5>
+                <p class="text-secondary mb-0">Every request gets a unique reference number you can use to follow its progress.</p>
+            </div>
+        </div>
+        <div class="col-md-4 reveal" style="--d:.2s">
+            <div class="feature-card h-100">
+                <div class="icon-box"><i class="bi bi-bag-check"></i></div>
+                <h5 class="fw-semibold">3. Pick it up</h5>
+                <p class="text-secondary mb-0">Once the status says Ready for Pickup, claim it at the registrar on your chosen date.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DOCUMENTS -->
+<section class="container py-4">
+    <div class="text-center mb-4 reveal">
+        <h2 class="fw-bold">Available documents</h2>
+    </div>
+    <div class="row g-3">
+        @{
+            var docs = new[]
+            {
+                ("bi-journal-text", "Transcript of Records"),
+                ("bi-patch-check", "Certificate of Enrollment"),
+                ("bi-heart", "Good Moral Character"),
+                ("bi-card-checklist", "Certificate of Grades"),
+                ("bi-box-arrow-right", "Honorable Dismissal"),
+                ("bi-mortarboard", "Diploma (Certified True Copy)")
+            };
+            var i = 0;
+        }
+        @foreach (var (icon, name) in docs)
+        {
+            <div class="col-6 col-lg-4 reveal" style="--d:@((i++ % 3) * 0.08)s">
+                <a class="doc-tile d-flex align-items-center gap-3" asp-controller="Requests" asp-action="Create">
+                    <i class="bi @icon fs-3"></i>
+                    <span class="fw-medium">@name</span>
+                </a>
+            </div>
+        }
+    </div>
+</section>

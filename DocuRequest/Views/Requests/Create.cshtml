@@ -1,0 +1,86 @@
+@model DocumentRequest
+@{
+    ViewData["Title"] = "New Request";
+}
+
+<section class="container page-top">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-4 reveal">
+                <h1 class="fw-bold">Request a document</h1>
+                <p class="text-secondary">Fill in your details. You'll get a reference number right after.</p>
+            </div>
+
+            <form asp-action="Create" method="post" class="form-card reveal" style="--d:.1s" novalidate>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <h6 class="form-section"><i class="bi bi-person-badge me-2"></i>Student information</h6>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-5">
+                        <label asp-for="StudentId" class="form-label"></label>
+                        <input asp-for="StudentId" class="form-control" placeholder="e.g. 2023-00123" />
+                        <span asp-validation-for="StudentId" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-7">
+                        <label asp-for="FullName" class="form-label"></label>
+                        <input asp-for="FullName" class="form-control" placeholder="Juan Dela Cruz" />
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" placeholder="you@school.edu" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Course" class="form-label"></label>
+                        <input asp-for="Course" class="form-control" placeholder="BS Information Technology" />
+                        <span asp-validation-for="Course" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <h6 class="form-section"><i class="bi bi-file-earmark-text me-2"></i>Document details</h6>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-8">
+                        <label asp-for="DocumentType" class="form-label"></label>
+                        <select asp-for="DocumentType" class="form-select"
+                                asp-items="Html.GetEnumSelectList<DocuRequest.Models.DocumentType>()">
+                            <option value="">Choose a document...</option>
+                        </select>
+                        <span asp-validation-for="DocumentType" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Copies" class="form-label"></label>
+                        <input asp-for="Copies" type="number" min="1" max="10" class="form-control" />
+                        <span asp-validation-for="Copies" class="text-danger small"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Purpose" class="form-label"></label>
+                        <textarea asp-for="Purpose" rows="3" class="form-control"
+                                  placeholder="e.g. Scholarship application, employment, transfer"></textarea>
+                        <span asp-validation-for="Purpose" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="PickupDate" class="form-label"></label>
+                        <input asp-for="PickupDate" type="date" class="form-control"
+                               value="@Model.PickupDate?.ToString("yyyy-MM-dd")"
+                               min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="PickupDate" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a class="btn btn-light btn-pill px-4" asp-controller="Home" asp-action="Index">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-pill px-4">
+                        <i class="bi bi-send me-1"></i> Submit request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+}

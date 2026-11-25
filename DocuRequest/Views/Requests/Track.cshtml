@@ -1,0 +1,50 @@
+@model List<DocumentRequest>
+@{
+    ViewData["Title"] = "Track Request";
+    var studentId = ViewBag.StudentId as string;
+    var searched = !string.IsNullOrWhiteSpace(studentId);
+}
+
+<section class="container page-top">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-4 reveal">
+                <h1 class="fw-bold">Track your requests</h1>
+                <p class="text-secondary">Enter your Student ID to see all of your document requests.</p>
+            </div>
+
+            <form method="get" class="search-bar reveal" style="--d:.1s">
+                <i class="bi bi-search"></i>
+                <input type="text" name="studentId" value="@studentId" class="form-control border-0 shadow-none"
+                       placeholder="Student ID (e.g. 2023-00123)" required />
+                <button class="btn btn-primary btn-pill px-4" type="submit">Search</button>
+            </form>
+
+            @if (searched && !Model.Any())
+            {
+                <div class="empty-state text-center reveal">
+                    <i class="bi bi-inbox display-4 text-secondary"></i>
+                    <p class="mt-2 mb-3 text-secondary">No requests found for <strong>@studentId</strong>.</p>
+                    <a class="btn btn-outline-primary btn-pill" asp-action="Create">Make a request</a>
+                </div>
+            }
+
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                var r = Model[i];
+                <a class="request-item reveal" style="--d:@(i * 0.06)s"
+                   asp-action="Details" asp-route-referenceNo="@r.ReferenceNo">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                        <div>
+                            <div class="fw-semibold">@r.DocumentType?.DisplayName()</div>
+                            <div class="small text-secondary">
+                                @r.ReferenceNo · @r.Copies @(r.Copies == 1 ? "copy" : "copies") · @r.CreatedAt.ToString("MMM d, yyyy")
+                            </div>
+                        </div>
+                        <span class="badge rounded-pill @r.Status.BadgeClass()">@r.Status.DisplayName()</span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>

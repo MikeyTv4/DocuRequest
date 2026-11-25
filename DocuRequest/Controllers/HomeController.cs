@@ -1,32 +1,20 @@
-using System.Diagnostics;
-using DocuRequest.Models;
+using DocuRequest.Data;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DocuRequest.Controllers
+namespace DocuRequest.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly AppDbContext _db;
+
+    public HomeController(AppDbContext db) => _db = db;
+
+    public IActionResult Index()
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        ViewBag.TotalRequests = _db.DocumentRequests.Count();
+        ViewBag.Released = _db.DocumentRequests.Count(r => r.Status == Models.RequestStatus.Released);
+        return View();
     }
+
+    public IActionResult Error() => View();
 }
